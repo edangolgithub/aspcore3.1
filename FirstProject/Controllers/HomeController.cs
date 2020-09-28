@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using FirstProject.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace FirstProject.Controllers
 {
@@ -28,11 +29,48 @@ namespace FirstProject.Controllers
         {
             return View();
         }
+        
+        public IActionResult evan()
+        {
+            return View("evan");
+        }
 
+        public IActionResult form()
+        {
+            return View();
+        }
+        public IActionResult formsubmit(string name)
+        {
+            
+            return View("result",name);
+        }
+       
+        public ViewResult ListResponses()
+        {
+            return View(Repository.Responses.Where(r => r.WillAttend == true));
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [HttpGet]
+        public ViewResult RsvpForm()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ViewResult RsvpForm(GuestResponse guestResponse)
+        {
+            if (ModelState.IsValid)
+            {
+                Repository.AddResponse(guestResponse);
+                return View("Thanks", guestResponse);
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }
