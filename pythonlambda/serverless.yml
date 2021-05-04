@@ -33,6 +33,12 @@ provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: 20201221
+  deploymentBucket: evanlambdas
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*       
+      Resource: "*"
 
 # you can overwrite defaults here
 #  stage: dev
@@ -68,6 +74,7 @@ provider:
 
 functions:
   hello:
+    name: pythonlambda
     handler: handler.hello
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
